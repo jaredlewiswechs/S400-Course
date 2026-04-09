@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebR Learning Suite</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>WebR Learning Suite</h1>
+      <p>A standalone browser app for learning and executing R code with WebR.</p>
+    </header>
+
+    <main class="layout">
+      <aside class="panel lessons">
+        <h2>Learning Path</h2>
+        <ol id="lesson-list"></ol>
+      </aside>
+
+      <section class="panel editor-panel">
+        <div class="editor-toolbar">
+          <h2>R Editor</h2>
+          <div class="actions">
+            <button id="load-example" type="button">Load lesson code</button>
+            <button id="run-code" type="button">Run code</button>
+            <button id="clear-output" type="button">Clear output</button>
+            <button id="save-snippet" type="button">Save snippet</button>
+          </div>
+        </div>
+
+        <label for="code-input" class="sr-only">R code input</label>
+        <textarea id="code-input" spellcheck="false"></textarea>
+
+        <h3>Saved snippets</h3>
+        <div class="snippet-controls">
+          <select id="snippet-select">
+            <option value="">Choose a saved snippet</option>
+          </select>
+          <button id="load-snippet" type="button">Load snippet</button>
+          <button id="delete-snippet" type="button">Delete snippet</button>
+        </div>
+      </section>
+
+      <section class="panel output-panel">
+        <h2>Output</h2>
+        <div id="status" class="status">Loading WebR runtime...</div>
+
+        <h3>Console</h3>
+        <pre id="console-output" class="console"></pre>
+
+        <h3>Plot</h3>
+        <div id="plot-output" class="plot-area"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <small>Tip: Start with lesson 1, then modify the code and rerun.</small>
+    </footer>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

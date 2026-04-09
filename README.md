@@ -152,3 +152,19 @@ M200-Geometry-of-the-Built-World/
 ## License
 
 Curriculum materials in this repository are intended for educational use.
+
+
+## WebR Standalone Learning App
+
+A standalone browser app for learning and executing R code via WebR is available in:
+
+- `webr-learning-suite/`
+
+Run it locally with:
+
+```bash
+cd webr-learning-suite
+python3 -m http.server 8080
+```
+
+Then visit <http://localhost:8080>.
