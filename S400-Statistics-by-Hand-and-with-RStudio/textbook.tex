@@ -1,0 +1,904 @@
+\documentclass[11pt,openany]{book}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+\usepackage{float}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+    pdftitle={Statistics by Hand and with RStudio},
+    pdfauthor={Your Name},
+    pdfsubject={High School Statistics Textbook}
+}
+
+\setstretch{1.08}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{Statistics by Hand and with RStudio}
+\fancyhead[RE,LO]{\leftmark}
+\fancyfoot[C]{\thepage}
+
+\titleformat{\chapter}[display]
+  {\normalfont\bfseries\Huge}
+  {\chaptername\ \thechapter}{20pt}{\Huge}
+
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{darkblue}{RGB}{20,40,120}
+\definecolor{darkgreen}{RGB}{20,100,20}
+\definecolor{codebg}{RGB}{248,248,248}
+
+\lstdefinestyle{rcode}{
+    language=R,
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{darkblue}\bfseries,
+    commentstyle=\color{darkgreen},
+    stringstyle=\color{red!70!black},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    columns=fullflexible
+}
+
+\newtcolorbox{bigidea}{
+    colback=blue!5,
+    colframe=blue!60!black,
+    title=Big Idea,
+    fonttitle=\bfseries
+}
+
+\newtcolorbox{byhand}{
+    colback=green!5,
+    colframe=green!50!black,
+    title=By-Hand Focus,
+    fonttitle=\bfseries
+}
+
+\newtcolorbox{rstudio}{
+    colback=orange!5,
+    colframe=orange!70!black,
+    title=RStudio Focus,
+    fonttitle=\bfseries
+}
+
+\newtcolorbox{mistakealert}{
+    colback=red!5,
+    colframe=red!65!black,
+    title=Mistake Alert,
+    fonttitle=\bfseries
+}
+
+\newtcolorbox{examplebox}{
+    colback=gray!5,
+    colframe=black!60,
+    title=Worked Example,
+    fonttitle=\bfseries
+}
+
+\newtcolorbox{practicebox}{
+    colback=yellow!8,
+    colframe=yellow!50!black,
+    title=Practice,
+    fonttitle=\bfseries
+}
+
+\newtheorem*{definition*}{Definition}
+
+\begin{document}
+
+\frontmatter
+
+\begin{titlepage}
+    \centering
+    \vspace*{1.5cm}
+    {\Huge \bfseries Statistics by Hand and with RStudio\par}
+    \vspace{0.6cm}
+    {\Large A High School Course in Data, Chance, and Decision-Making\par}
+    \vspace{1.5cm}
+    {\large Your Name\par}
+    \vspace{0.5cm}
+    {\large \today\par}
+    \vfill
+    \begin{tcolorbox}[colback=lightgray,colframe=black!60,width=0.85\textwidth]
+    This textbook is designed for a high school statistics course that balances
+    \textbf{manual calculation}, \textbf{conceptual understanding}, and
+    \textbf{real-world data analysis using RStudio}.
+    \end{tcolorbox}
+    \vfill
+\end{titlepage}
+
+\tableofcontents
+
+\chapter*{Preface}
+This book is built around a simple belief: students should learn statistics in the same way real professionals use it. That means students should:
+\begin{itemize}
+    \item understand ideas \textbf{by hand} to build intuition,
+    \item practice procedures on \textbf{small datasets} to master the mechanics,
+    \item use \textbf{RStudio} on larger datasets to see the power of computation,
+    \item and explain results in \textbf{clear everyday language}.
+\end{itemize}
+
+In this course, you do not just learn to compute an answer. You learn to ask good questions, examine data carefully, choose appropriate tools, and communicate evidence responsibly.
+
+\chapter*{How to Use This Book}
+Each chapter includes:
+\begin{itemize}
+    \item an \textbf{opening question} grounded in real-world scenarios,
+    \item clear \textbf{vocabulary and notes},
+    \item \textbf{by-hand examples} to illuminate the underlying math,
+    \item \textbf{RStudio examples} to scale up the analysis,
+    \item common \textbf{mistake alerts} to keep you on track,
+    \item and \textbf{chapter exercises} to test your mastery.
+\end{itemize}
+
+\chapter*{RStudio Quick Start}
+\section*{What Are R and RStudio?}
+\textbf{R} is a programming language built specifically for statistics and data analysis. \textbf{RStudio} is an integrated development environment (IDE) that makes R easier to use. Think of R as the engine of a car, and RStudio as the dashboard and steering wheel.
+
+\section*{Your First Commands}
+\begin{lstlisting}[style=rcode]
+# Basic math
+2 + 3
+
+# Creating a dataset (a vector)
+my_data <- c(4, 7, 9, 10)
+
+# Analyzing the data
+mean(my_data)
+summary(my_data)
+\end{lstlisting}
+
+\section*{A Note for Students}
+You are not expected to memorize every command immediately. Learn the patterns, ask questions, rely on the Help function in RStudio (by typing \texttt{?command}), and use code as a tool for thinking.
+
+\mainmatter
+
+%------------------------------------------------
+\chapter{What Is Statistics?}
+
+\section{Opening Question}
+A high school principal wants to know whether students are getting enough sleep. They ask 50 students in the cafeteria how many hours they slept last night. What can the school learn from that information, and what should it be careful about?
+
+\begin{bigidea}
+Statistics is the science of learning from data. It involves collecting, organizing, analyzing, and drawing conclusions from information.
+\end{bigidea}
+
+\section{Key Vocabulary}
+\begin{description}[leftmargin=1.5cm,style=nextline]
+    \item[Population] The entire group of individuals we want to study.
+    \item[Sample] A smaller subset selected from the population to represent it.
+    \item[Parameter] A numerical summary of a population (usually unknown).
+    \item[Statistic] A numerical summary of a sample (used to estimate the parameter).
+    \item[Variable] A characteristic measured on individuals.
+    \item[Categorical variable] A variable that places individuals into categories or groups (e.g., eye color, grade level).
+    \item[Quantitative variable] A variable measured with numbers where mathematical operations make sense (e.g., height, test scores).
+\end{description}
+
+\section{Types of Questions in Statistics}
+Statistics helps answer questions such as:
+\begin{itemize}
+    \item \textbf{How many?} (Proportions and counts)
+    \item \textbf{How much?} (Averages and spreads)
+    \item \textbf{Is there a difference?} (Comparing groups)
+    \item \textbf{Is there a relationship?} (Correlation and regression)
+    \item \textbf{How likely is an event?} (Probability)
+\end{itemize}
+
+\begin{examplebox}
+A principal asks, ``What percentage of students participate in at least one extracurricular activity?'' They survey 100 random students. 62 say "yes".
+
+\textbf{Population:} all students at the school
+\textbf{Sample:} the 100 students surveyed
+\textbf{Parameter:} the true percentage of all students who participate
+\textbf{Statistic:} 62\% (the percentage in the sample)
+\textbf{Variable:} participation in extracurriculars (Categorical: yes/no)
+\end{examplebox}
+
+\begin{byhand}
+For each scenario, identify the population, sample, parameter, and statistic:
+\begin{enumerate}
+    \item A cafeteria surveys 80 students to estimate the average amount of money all students spend on lunch. The 80 students spent an average of \$4.50.
+    \item A coach records the mile times of 12 runners to estimate the team's overall average speed.
+\end{enumerate}
+\end{byhand}
+
+\begin{rstudio}
+We can store a small dataset in R as a vector using the \texttt{c()} command, which stands for "combine".
+\begin{lstlisting}[style=rcode]
+sleep_hours <- c(6, 7, 8, 5, 9, 6, 7, 8)
+sleep_hours
+length(sleep_hours) # Counts how many items are in the dataset
+mean(sleep_hours)   # Calculates the average
+\end{lstlisting}
+\end{rstudio}
+
+\begin{mistakealert}
+A \textbf{sample} is not the same thing as a \textbf{population}, and a \textbf{statistic} is not a \textbf{parameter}. Parameters are fixed but usually unknown. Statistics vary from sample to sample.
+\end{mistakealert}
+
+\section{Exercises}
+\begin{enumerate}
+    \item Define statistics in your own words.
+    \item Give one example of a categorical variable and one example of a quantitative variable not mentioned in this chapter.
+    \item A recent poll of 1,000 adults in the US found that 45\% read at least one book a month. Identify the population and the sample. Is 45\% a parameter or a statistic?
+    \item Why might a school choose to use a sample instead of asking every single student?
+\end{enumerate}
+
+%------------------------------------------------
+\chapter{Producing Good Data}
+
+\section{Why Data Collection Matters}
+Bad data collection can produce misleading results, even if the math is flawless. "Garbage in, garbage out" is the golden rule of statistics.
+
+\section{Common Sampling Methods}
+\begin{itemize}
+    \item \textbf{Simple Random Sample (SRS):} Every group of size $n$ has an equal chance of being selected. Names in a hat.
+    \item \textbf{Stratified Random Sample:} The population is divided into groups (strata) based on a characteristic, and an SRS is taken from each group.
+    \item \textbf{Convenience Sample:} Choosing individuals who are easiest to reach. (Often flawed).
+    \item \textbf{Voluntary Response Sample:} People choose themselves by responding to a general appeal. (Often flawed).
+\end{itemize}
+
+\begin{definition*}
+A \textbf{biased sample} is a sample that consistently overestimates or underestimates the value you want to know because of the way it was selected.
+\end{definition*}
+
+\begin{examplebox}
+A teacher asks only students sitting in the front row whether the homework load is too heavy. This is a \textbf{convenience sample}. It is biased because front-row students might have different study habits than back-row students.
+\end{examplebox}
+
+\begin{byhand}
+Decide whether each sample is likely to be biased and why:
+\begin{enumerate}
+    \item An Instagram poll asking followers if school should start later.
+    \item A computer randomly selecting 50 student ID numbers from the school database.
+    \item Asking only varsity athletes if the school needs to increase the sports budget.
+\end{enumerate}
+\end{byhand}
+
+\begin{rstudio}
+R can be used to simulate random sampling, which helps eliminate human bias.
+\begin{lstlisting}[style=rcode]
+students <- 1:500 # Represents student IDs 1 through 500
+# Pick 20 students randomly, without replacement
+sample(students, size = 20, replace = FALSE)
+\end{lstlisting}
+\end{rstudio}
+
+\section{Surveys vs. Experiments}
+An \textbf{observational study} (like a survey) measures variables of interest but does not attempt to influence the responses. An \textbf{experiment} deliberately imposes some \textbf{treatment} on individuals to measure their responses. Only a well-designed experiment can prove cause-and-effect.
+
+\subsection{Principles of Experimental Design}
+\begin{enumerate}
+    \item \textbf{Control:} Use a baseline group that receives no treatment or a fake treatment (placebo).
+    \item \textbf{Randomization:} Randomly assign subjects to treatments to equalize groups.
+    \item \textbf{Replication:} Use enough subjects so that differences aren't just by chance.
+\end{enumerate}
+
+\section{Exercises}
+\begin{enumerate}
+    \item Explain why voluntary response samples (like internet polls) are notoriously unreliable.
+    \item Describe a method to take a Stratified Random Sample of students in your school.
+    \item What is a placebo, and why is it used in experiments?
+    \item What is the difference between an observational study and an experiment?
+\end{enumerate}
+
+%------------------------------------------------
+\chapter{Displaying Data}
+
+\section{Why Graphs Matter}
+Graphs help us see patterns, spot anomalies, compare groups, and communicate results clearly to an audience.
+
+\section{Displaying Categorical Data}
+\begin{itemize}
+    \item \textbf{Bar Chart:} Shows counts or percentages of categories. Bars do not touch.
+    \item \textbf{Pie Chart:} Shows how a whole is divided into parts. (Statisticians often avoid these because human eyes are bad at comparing angles).
+\end{itemize}
+
+\section{Displaying Quantitative Data}
+\begin{itemize}
+    \item \textbf{Dot Plot:} Good for small datasets. Each data point is a dot above a number line.
+    \item \textbf{Stem-and-Leaf Plot:} Maintains the original data values while showing the shape.
+    \item \textbf{Histogram:} Groups continuous data into "bins". Bars touch. Good for large datasets.
+    \item \textbf{Boxplot:} Based on the five-number summary. Excellent for comparing multiple groups side-by-side.
+\end{itemize}
+
+\begin{examplebox}
+Suppose the number of books read by 8 students over the summer is:
+\[
+2,\ 4,\ 4,\ 5,\ 6,\ 6,\ 7,\ 10
+\]
+A dot plot would place two dots above the 4, two above the 6, and single dots elsewhere. We can instantly see a gap between 7 and 10.
+\end{examplebox}
+
+\begin{byhand}
+Create a stem-and-leaf plot for the following quiz scores:
+\[
+65, 71, 74, 74, 82, 85, 88, 91, 95
+\]
+\end{byhand}
+
+\begin{rstudio}
+Here is how to make a simple histogram and a side-by-side boxplot in R.
+\begin{lstlisting}[style=rcode]
+books <- c(2, 4, 4, 5, 6, 6, 7, 10, 12, 15, 20)
+hist(books, main = "Books Read This Summer",
+     xlab = "Number of Books", col = "lightblue")
+
+# Boxplots are great for finding outliers
+boxplot(books, horizontal = TRUE, main = "Boxplot of Books Read")
+\end{lstlisting}
+\end{rstudio}
+
+\section{Exercises}
+\begin{enumerate}
+    \item When must you use a histogram instead of a bar chart?
+    \item Create a frequency table and a dot plot for this data: $3,3,4,5,5,5,6,7,8,8$.
+    \item Why are boxplots particularly useful when comparing the test scores of four different classrooms?
+\end{enumerate}
+
+%------------------------------------------------
+\chapter{Measures of Center and Spread}
+
+\section{Measures of Center}
+Measures of center attempt to describe a "typical" value in a dataset.
+
+\subsection{Mean}
+The mean is the arithmetic average. It balances the physical weights of the data.
+\[
+\bar{x} = \frac{\sum x_i}{n} = \frac{x_1 + x_2 + \cdots + x_n}{n}
+\]
+
+\subsection{Median}
+The median is the exact middle value when data are arranged in ascending order. If there is an even number of values, average the middle two.
+
+\section{Measures of Spread}
+Measures of spread describe how much the data vary or fluctuate.
+
+\subsection{Range and IQR}
+\[
+\text{Range} = \text{Maximum} - \text{Minimum}
+\]
+The Interquartile Range (IQR) measures the spread of the middle 50\% of the data.
+\[
+IQR = Q_3 - Q_1
+\]
+
+\subsection{Standard Deviation}
+Standard deviation ($s$) measures the typical or average distance of data points from the mean.
+\[
+s = \sqrt{ \frac{\sum (x_i - \bar{x})^2}{n - 1} }
+\]
+Variance is simply the standard deviation squared ($s^2$).
+
+\begin{examplebox}
+Find the mean, median, and range of: $4,\ 5,\ 6,\ 7,\ 8$
+
+\textbf{Mean:} $\bar{x} = \frac{4+5+6+7+8}{5} = \frac{30}{5} = 6$
+
+\textbf{Median:} The middle number is $6$.
+
+\textbf{Range:} $8 - 4 = 4$
+\end{examplebox}
+
+\begin{byhand}
+Calculate the standard deviation of $2, 4, 6$ by hand.
+1. Find the mean: $\bar{x} = 4$.
+2. Find the deviations: $-2, 0, 2$.
+3. Square the deviations: $4, 0, 4$.
+4. Sum the squares: $8$.
+5. Divide by $n-1$: $8 / (3-1) = 4$.
+6. Take the square root: $s = \sqrt{4} = 2$.
+\end{byhand}
+
+\begin{rstudio}
+\begin{lstlisting}[style=rcode]
+scores <- c(4, 5, 6, 7, 8)
+mean(scores)
+median(scores)
+max(scores) - min(scores) # Range
+sd(scores)                # Standard deviation
+summary(scores)           # Gives Min, Q1, Median, Mean, Q3, Max
+\end{lstlisting}
+\end{rstudio}
+
+\begin{mistakealert}
+Do not confuse \textbf{mean} and \textbf{median}. The mean uses every value and is highly affected by extreme numbers. The median depends solely on order and position, making it \textbf{resistant} to outliers.
+\end{mistakealert}
+
+\section{Exercises}
+\begin{enumerate}
+    \item Compute the mean and median of $5, 6, 7, 8, 40$.
+    \item Why does the outlier (40) affect the mean more than the median?
+    \item If every student in a class scores exactly 85 on a test, what is the standard deviation? Why?
+\end{enumerate}
+
+%------------------------------------------------
+\chapter{Describing Shape and Outliers}
+
+\section{Shape of a Distribution}
+When looking at a histogram or dot plot, we describe its shape:
+\begin{itemize}
+    \item \textbf{Symmetric:} The left and right halves are mirror images.
+    \item \textbf{Skewed Right:} The "tail" stretches to the right (higher values). The mean is pulled higher than the median.
+    \item \textbf{Skewed Left:} The "tail" stretches to the left. The mean is pulled lower than the median.
+    \item \textbf{Unimodal / Bimodal:} Having one peak (mode) vs. having two distinct peaks.
+\end{itemize}
+
+\section{Identifying Outliers}
+An outlier is a value that stands conspicuously away from the rest of the data. We use the $1.5 \times IQR$ rule to mathematically flag outliers.
+
+\[
+\text{Lower Fence} = Q_1 - 1.5(IQR)
+\]
+\[
+\text{Upper Fence} = Q_3 + 1.5(IQR)
+\]
+
+\begin{examplebox}
+If $Q_1 = 10$ and $Q_3 = 18$, then:
+\[
+IQR = 18 - 10 = 8
+\]
+\[
+\text{Lower Fence} = 10 - 1.5(8) = 10 - 12 = -2
+\]
+\[
+\text{Upper Fence} = 18 + 1.5(8) = 18 + 12 = 30
+\]
+Any data value strictly below $-2$ or strictly above $30$ is considered an outlier.
+\end{examplebox}
+
+\section{The Normal Distribution}
+A highly specific symmetric, bell-shaped curve is the Normal Distribution. It is governed by the \textbf{Empirical Rule (68-95-99.7)}:
+\begin{itemize}
+    \item $\approx 68\%$ of data falls within 1 standard deviation of the mean.
+    \item $\approx 95\%$ of data falls within 2 standard deviations.
+    \item $\approx 99.7\%$ of data falls within 3 standard deviations.
+\end{itemize}
+
+We can standardize data to compare different scales using \textbf{Z-scores}:
+\[
+z = \frac{x - \mu}{\sigma}
+\]
+A Z-score tells us how many standard deviations a value is from the mean.
+
+\begin{rstudio}
+\begin{lstlisting}[style=rcode]
+times <- c(10, 11, 12, 13, 14, 15, 35)
+# Boxplot automatically displays outliers as individual dots
+boxplot(times, main = "Completion Times")
+IQR(times)
+\end{lstlisting}
+\end{rstudio}
+
+\section{Exercises}
+\begin{enumerate}
+    \item Describe the difference between a skewed right and skewed left distribution.
+    \item In a right-skewed distribution, which is usually larger: the mean or the median?
+    \item A student scores an 85 on a math test (mean 75, sd 5) and a 90 on a history test (mean 85, sd 10). Calculate the Z-scores. Which performance was relatively better?
+\end{enumerate}
+
+%------------------------------------------------
+\chapter{Scatterplots and Correlation}
+
+\section{Relationships Between Two Variables}
+When we measure two quantitative variables on the same individuals, we want to know if there is an association between them.
+\begin{itemize}
+    \item \textbf{Explanatory Variable ($x$):} May help explain or predict changes. (X-axis).
+    \item \textbf{Response Variable ($y$):} The outcome of interest. (Y-axis).
+\end{itemize}
+
+\begin{definition*}
+A \textbf{scatterplot} displays pairs of quantitative values, showing direction, form, and strength of the relationship.
+\end{definition*}
+
+\section{Correlation ($r$)}
+\textbf{Correlation} measures the direction and strength of a \textit{linear} relationship.
+\[
+-1 \leq r \leq 1
+\]
+\begin{itemize}
+    \item $r$ close to $1$: Strong positive linear relationship. As $x$ goes up, $y$ goes up.
+    \item $r$ close to $-1$: Strong negative linear relationship. As $x$ goes up, $y$ goes down.
+    \item $r$ close to $0$: Weak or no linear relationship.
+\end{itemize}
+
+\begin{mistakealert}
+\textbf{Correlation does not imply causation.} Just because ice cream sales and shark attacks are highly correlated does not mean one causes the other. Both are driven by a \textbf{lurking variable} (summer heat). Furthermore, $r$ only measures \textit{linear} relationships. A perfect curve could have $r = 0$.
+\end{mistakealert}
+
+\begin{rstudio}
+\begin{lstlisting}[style=rcode]
+hours <- c(1, 2, 2, 3, 4, 4, 5)
+scores <- c(62, 65, 70, 74, 80, 84, 90)
+
+plot(hours, scores, pch = 16, col = "blue",
+     main = "Hours Studied vs Test Score",
+     xlab = "Hours Studied", ylab = "Test Score")
+
+cor(hours, scores) # Calculate correlation coefficient
+\end{lstlisting}
+\end{rstudio}
+
+\section{Exercises}
+\begin{enumerate}
+    \item Give an example of two variables that likely have a strong negative correlation.
+    \item If the correlation between two variables is $r = -0.95$, what does that tell you?
+    \item Explain why two highly correlated variables might not have a cause-and-effect relationship.
+\end{enumerate}
+
+%------------------------------------------------
+\chapter{Linear Regression}
+
+\section{A Line of Best Fit}
+When a scatterplot shows a linear relationship, we can model it with a Least Squares Regression Line (LSRL). This line minimizes the sum of the squared distances from the points to the line.
+
+The equation of a regression line is:
+\[
+\hat{y} = a + bx
+\]
+where:
+\begin{itemize}
+    \item $\hat{y}$ (y-hat) is the \textit{predicted} value of the response variable.
+    \item $a$ is the $y$-intercept (predicted value of $y$ when $x=0$).
+    \item $b$ is the slope (the predicted change in $y$ for every 1 unit increase in $x$).
+\end{itemize}
+
+\begin{examplebox}
+Suppose a regression line predicting test score from hours studied is:
+\[
+\hat{y} = 52 + 7x
+\]
+\textbf{Slope interpretation:} For every additional hour studied, the model predicts the test score will increase by 7 points.
+
+\textbf{Intercept interpretation:} If a student studies for 0 hours, the model predicts a score of 52.
+\end{examplebox}
+
+\section{Residuals and $R^2$}
+A residual is the prediction error:
+\[
+\text{Residual} = \text{Actual } y - \text{Predicted } \hat{y} = y - \hat{y}
+\]
+The Coefficient of Determination, \textbf{$R^2$}, tells us the percentage of the variation in the response variable ($y$) that is explained by the linear model with $x$.
+
+\begin{rstudio}
+\begin{lstlisting}[style=rcode]
+hours <- c(1, 2, 2, 3, 4, 4, 5)
+scores <- c(62, 65, 70, 74, 80, 84, 90)
+
+model <- lm(scores ~ hours) # "Linear Model: scores predicted by hours"
+summary(model)
+
+plot(hours, scores, pch = 16)
+abline(model, col = "red", lwd = 2) # Adds the line of best fit
+\end{lstlisting}
+\end{rstudio}
+
+\begin{mistakealert}
+Beware of \textbf{Extrapolation}: Predicting values far outside the domain of your $x$ data. If your data covers 1 to 5 hours of studying, do not use the model to predict a score for 20 hours of studying.
+\end{mistakealert}
+
+\section{Exercises}
+\begin{enumerate}
+    \item Using the model $\hat{y} = 52 + 7x$, predict the score for a student who studied 3 hours.
+    \item If that student actually scored a 70, what is their residual? Did the model overpredict or underpredict?
+    \item What is extrapolation, and why is it dangerous?
+\end{enumerate}
+
+%------------------------------------------------
+\chapter{Probability}
+
+\section{What Is Probability?}
+Probability measures the long-run relative frequency of an event. It tells us how likely an event is to happen.
+\[
+0 \leq P(\text{Event}) \leq 1
+\]
+
+\section{Basic Rules}
+\begin{itemize}
+    \item \textbf{Complement Rule:} The probability of an event NOT happening.
+    \[ P(A^c) = 1 - P(A) \]
+    \item \textbf{Addition Rule (Mutually Exclusive Events):}
+    \[ P(A \text{ or } B) = P(A) + P(B) \]
+    \item \textbf{General Addition Rule:}
+    \[ P(A \text{ or } B) = P(A) + P(B) - P(A \text{ and } B) \]
+\end{itemize}
+
+\section{Conditional Probability and Independence}
+Sometimes knowing one event happened changes the probability of another.
+\[
+P(A|B) = \frac{P(A \text{ and } B)}{P(B)}
+\]
+Read as "The probability of A, given that B has already occurred." If knowing B doesn't change the probability of A, the events are \textbf{independent}.
+
+\begin{examplebox}
+If a standard 52-card deck is shuffled, $P(\text{King}) = \frac{4}{52}$.
+
+But if I tell you the card drawn is a "Face Card" (Jack, Queen, or King, of which there are 12), the probability changes:
+$P(\text{King} | \text{Face Card}) = \frac{4}{12}$.
+\end{examplebox}
+
+\begin{byhand}
+List the sample space for flipping two coins (e.g., HH, HT...). Then find:
+\begin{enumerate}
+    \item The probability of exactly one head.
+    \item The probability of at least one head.
+\end{enumerate}
+\end{byhand}
+
+\begin{rstudio}
+We can use R to simulate probability experiments (Law of Large Numbers).
+\begin{lstlisting}[style=rcode]
+# Simulate flipping a coin 1000 times
+flips <- sample(c("Heads", "Tails"), size = 1000, replace = TRUE)
+table(flips)
+prop.table(table(flips)) # Should be very close to 0.50
+\end{lstlisting}
+\end{rstudio}
+
+\section{Exercises}
+\begin{enumerate}
+    \item Find the probability of drawing a heart from a standard 52-card deck.
+    \item If $P(\text{Rain}) = 0.3$, what is the probability that it does NOT rain?
+    \item What does it mean for two events to be independent?
+\end{enumerate}
+
+%------------------------------------------------
+\chapter{Sampling Distributions and Inference}
+
+\section{Why Samples Vary}
+If you and your friend both take a random sample of 50 students and calculate the average GPA, your answers will be slightly different. This is called \textbf{Sampling Variability}. It is normal and expected.
+
+\begin{bigidea}
+Statistical inference works because we understand mathematically how much samples vary. We use probability to determine if a result is just random chance, or statistically significant.
+\end{bigidea}
+
+\section{Confidence Intervals}
+A sample statistic estimates a population parameter, but with uncertainty. A confidence interval provides a range of plausible values for the parameter.
+\[
+\text{Statistic} \pm \text{Margin of Error}
+\]
+
+\begin{examplebox}
+A poll estimates that 58\% of voters support a bond measure, with a margin of error of 4\%.
+The 95\% confidence interval is:
+\[
+58\% \pm 4\% \Rightarrow (54\%, 62\%)
+\]
+We are 95\% confident that the true population percentage lies between 54\% and 62\%.
+\end{examplebox}
+
+\section{Hypothesis Testing}
+A hypothesis test measures the strength of evidence against a default claim.
+\begin{itemize}
+    \item \textbf{Null Hypothesis ($H_0$):} The claim of "no difference" or "no effect."
+    \item \textbf{Alternative Hypothesis ($H_a$):} The claim we are trying to find evidence for.
+    \item \textbf{P-value:} The probability of getting our sample data (or more extreme) IF the null hypothesis were entirely true.
+\end{itemize}
+If the P-value is very low (typically less than 0.05), we \textbf{reject} the null hypothesis.
+
+\begin{rstudio}
+\begin{lstlisting}[style=rcode]
+# One-sample t-test testing if the true mean score is greater than 80
+scores <- c(82, 85, 78, 90, 88, 84, 79, 87)
+t.test(scores, mu = 80, alternative = "greater")
+\end{lstlisting}
+\end{rstudio}
+
+\section{Exercises}
+\begin{enumerate}
+    \item In your own words, what is a margin of error?
+    \item Why do larger samples usually give smaller margins of error?
+    \item If a P-value is 0.01, does this give strong or weak evidence against the null hypothesis?
+\end{enumerate}
+
+%------------------------------------------------
+\chapter{Working with Real Data in RStudio}
+
+\section{Importing Data}
+Real data doesn't come in tiny lists of 5 numbers. It comes in large spreadsheets, often saved as CSV (Comma Separated Values) files.
+
+\begin{lstlisting}[style=rcode]
+# Read the data into R
+my_data <- read.csv("student_data.csv")
+
+# Look at the first 6 rows
+head(my_data)
+
+# Check the structure (variable types)
+str(my_data)
+\end{lstlisting}
+
+\section{Handling Messy Data}
+Real data often contain missing values (\texttt{NA} in R). If you try to calculate a mean with missing data, R will return \texttt{NA}. You must tell R to remove them.
+
+\begin{lstlisting}[style=rcode]
+# Using na.rm = TRUE ignores the missing values
+mean(my_data$SleepHours, na.rm = TRUE)
+\end{lstlisting}
+
+\section{Filtering and Comparing}
+Often we want to compare subsets of our data.
+\begin{lstlisting}[style=rcode]
+# Subset the data
+ninth_graders <- subset(my_data, Grade == 9)
+twelfth_graders <- subset(my_data, Grade == 12)
+
+mean(ninth_graders$SleepHours, na.rm = TRUE)
+mean(twelfth_graders$SleepHours, na.rm = TRUE)
+
+# Boxplot comparing sleep across ALL grades
+boxplot(SleepHours ~ Grade, data = my_data,
+        main = "Sleep by Grade Level",
+        xlab = "Grade Level",
+        ylab = "Hours of Sleep",
+        col = c("pink", "lightblue", "lightgreen", "orange"))
+\end{lstlisting}
+
+\begin{mistakealert}
+Real data often contain typing errors or inconsistent labels (e.g., "Male", "M", "male"). Always inspect your data with \texttt{table()} or \texttt{summary()} before trusting the output.
+\end{mistakealert}
+
+\section{Exercises}
+\begin{enumerate}
+    \item Why is it important to run \texttt{head()} and \texttt{str()} immediately after importing a dataset?
+    \item What does \texttt{na.rm = TRUE} do, and why is it necessary in real-world data analysis?
+    \item Write the R code to create a subset of \texttt{my\_data} for students who have a GPA strictly greater than 3.5.
+\end{enumerate}
+
+%------------------------------------------------
+\chapter{Capstone Project}
+
+\section{Your Statistical Investigation}
+In this course, statistics is not just about solving textbook exercises. It is about asking meaningful questions about the world and using data responsibly to answer them.
+
+\section{Suggested Project Steps}
+\begin{enumerate}
+    \item \textbf{Question:} Choose a specific, measurable question.
+    \item \textbf{Design:} Decide what data you need and how to collect it fairly without bias.
+    \item \textbf{Collection:} Gather your data or find a reliable secondary dataset (e.g., Kaggle, Census).
+    \item \textbf{Cleaning:} Enter data into a CSV, check for errors, and load it into RStudio.
+    \item \textbf{Exploration:} Create graphs and summary statistics. Look at shape, center, and spread.
+    \item \textbf{Inference:} Use a confidence interval or regression model to draw deeper conclusions.
+    \item \textbf{Communication:} Present your findings in plain English, noting any limitations or biases in your study.
+\end{enumerate}
+
+\section{Possible Topics}
+\begin{itemize}
+    \item The relationship between phone screen time and GPA.
+    \item Do students who play sports get less sleep?
+    \item Taste tests: Can students tell the difference between name-brand and generic soda? (An experiment!)
+    \item Commute times and tardiness.
+    \item Local weather trends over the last 50 years.
+\end{itemize}
+
+\begin{practicebox}
+Write a one-paragraph proposal for your project. Include:
+\begin{itemize}
+    \item your primary research question,
+    \item the specific variables you will study (and whether they are categorical or quantitative),
+    \item your planned method of data collection,
+    \item and at least one statistical graph you expect to create.
+\end{itemize}
+\end{practicebox}
+
+%------------------------------------------------
+\backmatter
+
+\chapter*{Appendix A: Basic R Commands}
+\begin{longtable}{>{\ttfamily}p{0.28\textwidth} p{0.62\textwidth}}
+\toprule
+Command & Purpose \\
+\midrule
+\endhead
+c(...) & creates a vector (combines elements) \\
+mean(x) & computes the arithmetic mean \\
+median(x) & computes the median \\
+summary(x) & gives a quick five-number summary plus mean \\
+sd(x) & computes standard deviation \\
+table(x) & creates a frequency count for categories \\
+hist(x) & makes a histogram \\
+boxplot(x) & makes a boxplot \\
+plot(x,y) & makes a scatterplot \\
+cor(x,y) & computes correlation coefficient ($r$) \\
+lm(y \textasciitilde x) & fits a linear model \\
+read.csv("file.csv") & imports a CSV file as a dataframe \\
+subset(data, condition) & filters rows based on a logical condition \\
+\bottomrule
+\end{longtable}
+
+\chapter*{Appendix B: Formula Sheet}
+\textbf{Mean (Sample)}
+\[ \bar{x} = \frac{\sum x_i}{n} \]
+
+\textbf{Standard Deviation (Sample)}
+\[ s = \sqrt{ \frac{\sum (x_i - \bar{x})^2}{n - 1} } \]
+
+\textbf{Outlier Bounds}
+\[ \text{Lower Fence} = Q_1 - 1.5(IQR) \]
+\[ \text{Upper Fence} = Q_3 + 1.5(IQR) \]
+
+\textbf{Z-Score}
+\[ z = \frac{x - \mu}{\sigma} \]
+
+\textbf{Least Squares Regression Line}
+\[ \hat{y} = a + bx \]
+
+\textbf{Probability Rules}
+\[ P(A^c) = 1 - P(A) \]
+\[ P(A \text{ or } B) = P(A) + P(B) - P(A \text{ and } B) \]
+\[ P(A|B) = \frac{P(A \text{ and } B)}{P(B)} \]
+
+\chapter*{Appendix C: Teacher Notes}
+This textbook can be taught with a repeating rhythm to build deep competency:
+\begin{enumerate}
+    \item \textbf{Introduce} the concept with a real, highly relatable question.
+    \item \textbf{Practice by hand} on a very small dataset to demystify the formula.
+    \item \textbf{Scale up} by repeating the concept in RStudio to show the power of software.
+    \item \textbf{Apply} to a larger or more messy, realistic dataset.
+    \item \textbf{Communicate} by asking students to interpret the numerical output in everyday writing.
+\end{enumerate}
+
+A strong balance for a modern high school course is:
+\begin{itemize}
+    \item 30\% by-hand work (to build intuition),
+    \item 40\% RStudio work (to build modern skills),
+    \item 30\% writing, discussion, and project-based application.
+\end{itemize}
+
+\chapter*{Index of Themes}
+\begin{multicols}{2}
+\begin{itemize}
+    \item Bias
+    \item Boxplot
+    \item Categorical variable
+    \item Confidence interval
+    \item Correlation ($r$)
+    \item Data cleaning
+    \item Experiment vs Observational
+    \item Extrapolation
+    \item Histogram
+    \item Hypothesis test
+    \item Interquartile Range (IQR)
+    \item Mean
+    \item Median
+    \item Normal Distribution
+    \item Outlier
+    \item P-value
+    \item Placebo
+    \item Population
+    \item Probability
+    \item Random sample
+    \item Regression
+    \item RStudio
+    \item Sample
+    \item Scatterplot
+    \item Standard deviation
+    \item Statistic vs Parameter
+    \item Variable
+    \item Z-score
+\end{itemize}
+\end{multicols}
+
+\end{document}
